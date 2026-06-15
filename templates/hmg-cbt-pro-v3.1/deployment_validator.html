@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HMG Academy CBT | Deployment Validator</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/hmg-academy-logo.png">
+<style>
+:root{--bg:#09090b;--surface:#18181b;--surface2:#27272a;--border:#27272a;--text:#f4f4f5;--muted:#a1a1aa;--primary:#10b981;--danger:#ef4444;--warning:#f59e0b;--info:#3b82f6;--purple:#8b5cf6}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,rgba(16,185,129,.16),transparent 32%),radial-gradient(circle at 90% 20%,rgba(139,92,246,.15),transparent 34%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}.wrap{max-width:1100px;margin:0 auto;padding:28px}.top{display:flex;gap:16px;align-items:center;margin-bottom:20px}.logo{width:70px;height:70px;object-fit:cover;border-radius:18px;border:1px solid rgba(139,92,246,.45);box-shadow:0 18px 50px rgba(59,130,246,.2)}h1{margin:0;font-size:clamp(24px,4vw,36px)}p{color:var(--muted);line-height:1.7}.card{background:rgba(24,24,27,.92);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 12px 40px rgba(0,0,0,.26)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.check{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:14px}.check b{display:flex;align-items:center;gap:8px;margin-bottom:6px}.ok{color:var(--primary)}.bad{color:var(--danger)}.warn{color:var(--warning)}button,a.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:10px;background:var(--primary);color:#000;font-weight:900;padding:11px 16px;cursor:pointer;text-decoration:none;font-size:13px}button.ghost,a.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}textarea{width:100%;min-height:170px;background:#050505;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:ui-monospace,Consolas,monospace;font-size:12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.pill{display:inline-block;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;background:var(--surface2);color:var(--muted);margin:2px}.meter{height:10px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:12px 0}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--danger),var(--warning),var(--primary));transition:.4s}.small{font-size:12px;color:var(--muted)}code{background:#050505;border:1px solid var(--border);border-radius:6px;padding:2px 6px;color:var(--primary)}@media(max-width:640px){.wrap{padding:16px}.top{align-items:flex-start}.toolbar{display:grid}.toolbar>*{justify-content:center}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <img class="logo" src="assets/hmg-academy-logo.png" alt="HMG Academy logo">
+    <div>
+      <h1>Deployment Validator</h1>
+      <p>One-click browser-only health check for the static files, PWA assets, Supabase config visibility, and deployment readiness. Uses free browser APIs only.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="toolbar">
+      <button onclick="runChecks()">▶ Run Checks</button>
+      <button class="ghost" onclick="copyReport()">📋 Copy Report</button>
+      <button class="ghost" onclick="downloadReport()">⬇ Download Report</button>
+      <a class="btn ghost" href="feature_guide.html">📖 Feature Guide</a>
+      <a class="btn ghost" href="index.html">Home</a>
+    </div>
+    <div class="meter"><div class="fill" id="fill"></div></div>
+    <div id="score" class="small">Run checks to calculate readiness score.</div>
+  </div>
+  <div class="card">
+    <h2>Readiness Checks</h2>
+    <div id="checks" class="grid"></div>
+  </div>
+  <div class="card">
+    <h2>Deployment Notes</h2>
+    <p>This validator cannot access your private Supabase dashboard. It checks what the browser can see: required static files, HTTPS/PWA support, JavaScript configuration strings, and service worker registration readiness. Run the SQL smoke test from the Teacher/Admin dashboard for database-level verification.</p>
+    <div id="notes"></div>
+  </div>
+  <div class="card">
+    <h2>Generated Report</h2>
+    <textarea id="report" readonly>Run checks to generate report...</textarea>
+  </div>
+</div>
+<script>
+const REQUIRED=['index.html','teacher.html','student.html','admin.html','offline.html','sw.js','manifest.webmanifest','hmg-icon.svg','assets/hmg-academy-logo.png','README.md','DEPLOYMENT.md','FEATURES.md','COMPLETE_SQL_SETUP.sql'];
+let results=[];
+function row(status,title,msg){return{status,title,msg}}
+async function fileExists(path){try{const r=await fetch(path,{cache:'no-store'});return r.ok}catch(e){return false}}
+async function textOf(path){try{const r=await fetch(path,{cache:'no-store'});return r.ok?await r.text():''}catch(e){return ''}}
+function icon(s){return s==='ok'?'✅':s==='warn'?'⚠️':'❌'}
+function cls(s){return s==='ok'?'ok':s==='warn'?'warn':'bad'}
+async function runChecks(){
+ results=[];document.getElementById('checks').innerHTML='<div class="check"><b class="warn">⏳ Running checks...</b><p>Please wait.</p></div>';
+ let found=0;for(const f of REQUIRED){if(await fileExists(f))found++;}
+ results.push(row(found===REQUIRED.length?'ok':'bad','Required files',`${found}/${REQUIRED.length} required files found.`));
+ results.push(row(location.protocol==='https:'||location.hostname==='localhost'||location.protocol==='file:'?'ok':'warn','HTTPS hosting',location.protocol==='https:'?'HTTPS active.':'Use HTTPS in production so camera, microphone, PWA, and secure auth work reliably.'));
+ const manifest=await textOf('manifest.webmanifest');
+ results.push(row(manifest.includes('HMG Academy CBT')&&manifest.includes('icons')?'ok':'bad','PWA manifest',manifest?'Manifest exists and contains app metadata.':'manifest.webmanifest missing.'));
+ const sw=await textOf('sw.js');
+ results.push(row(sw.includes('CACHE_NAME')&&sw.includes('offline.html')?'ok':'bad','Service worker',sw?'Service worker file found with offline fallback.':'sw.js missing.'));
+ const teacher=await textOf('teacher.html'); const student=await textOf('student.html'); const admin=await textOf('admin.html'); const sql=await textOf('COMPLETE_SQL_SETUP.sql');
+ const hasSB=teacher.includes('SB_URL')&&teacher.includes('SB_KEY')&&student.includes('SB_URL')&&student.includes('SB_KEY');
+ results.push(row(hasSB?'ok':'bad','Supabase config',hasSB?'SB_URL and SB_KEY are present in teacher/student portals.':'Supabase variables are missing.'));
+ results.push(row(!teacher.includes('service_role')&&!student.includes('service_role')&&!admin.includes('service_role')?'ok':'bad','No service_role key','No frontend file appears to contain a Supabase service_role key.'));
+ results.push(row(sql.includes('is_platform_admin')&&sql.includes('get_public_exam_by_code')&&sql.includes('get_exam_attempt_count')?'ok':'bad','Correct v3.1 SQL/RPC setup',sql?'SQL contains admin guard, public exam RPC, and attempt-count RPC.':'COMPLETE_SQL_SETUP.sql missing.'));
+ results.push(row(teacher.includes('admin_get_all_profiles')&&admin.includes('admin_get_all_results')?'ok':'warn','Admin SQL/RPC support','Admin panel and teacher SQL guide include admin RPC references.'));
+ results.push(row(student.includes('get_public_exam_by_code')&&student.includes('get_exam_attempt_count')?'ok':'bad','Student secure access RPCs','Student portal uses secure RPCs instead of broad anonymous table reads.')); 
+ results.push(row(student.includes('downloadResultBackup')&&teacher.includes('importStudentResultBackup')?'ok':'warn','Offline result recovery','Student backup download and teacher backup import are present.'));
+ results.push(row(student.includes('face-api.js')&&student.includes('Web Audio API')?'ok':'warn','Free proctoring tools','Browser/cdn-based face/audio proctoring code detected; no paid AI API required.'));
+ const missing=REQUIRED.filter(async()=>false);
+ render();
+}
+function render(){const ok=results.filter(r=>r.status==='ok').length,bad=results.filter(r=>r.status==='bad').length,total=results.length;const score=Math.round(ok/total*100);document.getElementById('fill').style.width=score+'%';document.getElementById('score').innerHTML=`Readiness score: <strong class="${bad?'warn':'ok'}">${score}%</strong> · ${ok}/${total} checks passed · ${bad} blocking issue(s).`;document.getElementById('checks').innerHTML=results.map(r=>`<div class="check"><b class="${cls(r.status)}">${icon(r.status)} ${r.title}</b><p>${r.msg}</p></div>`).join('');document.getElementById('notes').innerHTML=['Run Supabase SQL setup from <code>teacher.html → Settings</code>.','Configure Supabase Auth redirect URLs to your production domain.','Create one teacher, one test exam, one student submission, and verify result appears.','Use the Admin Panel Security tab for RPC/RLS smoke checks.'].map(x=>`<span class="pill">${x}</span>`).join('');const lines=['HMG Academy CBT Deployment Validator Report',new Date().toISOString(),'','Checks:',...results.map(r=>`${icon(r.status)} ${r.title}: ${r.msg}`),'','Next steps:','1. Fix any ❌ items above.','2. Run Supabase SQL setup in Teacher Dashboard → Settings.','3. Test teacher login, exam creation, student submission, result dashboard, and admin panel.','4. Deploy only with the anon key; never expose service_role key.'];document.getElementById('report').value=lines.join('\n')}
+function copyReport(){navigator.clipboard.writeText(document.getElementById('report').value).then(()=>alert('Report copied.')).catch(()=>alert('Copy failed.'))}
+function downloadReport(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([document.getElementById('report').value],{type:'text/plain'}));a.download='hmg_cbt_deployment_validator_report.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),800)}
+runChecks();
+</script>
+</body>
+</html>
