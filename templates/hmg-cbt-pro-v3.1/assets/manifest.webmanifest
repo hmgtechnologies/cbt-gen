@@ -1,0 +1,46 @@
+{
+  "name": "HMG Academy CBT Pro",
+  "short_name": "HMG CBT",
+  "description": "Free browser-based CBT platform for teachers, students, and administrators. Built by HMG Concepts — no paid AI API required.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#09090b",
+  "theme_color": "#10b981",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "assets/hmg-academy-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "hmg-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Teacher Dashboard",
+      "short_name": "Teacher",
+      "url": "./teacher.html",
+      "description": "Create and manage exams"
+    },
+    {
+      "name": "Student Portal",
+      "short_name": "Student",
+      "url": "./student.html",
+      "description": "Enter exam link or access code"
+    },
+    {
+      "name": "Admin Panel",
+      "short_name": "Admin",
+      "url": "./admin.html",
+      "description": "Manage teachers and platform diagnostics"
+    }
+  ]
+}
