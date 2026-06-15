@@ -1,0 +1,13 @@
+{
+  "name": "HMG CBT Site Generator",
+  "short_name": "CBT Gen",
+  "description": "Client-side generator for branded CBT websites using HMG Academy CBT Pro template. No paid AI API required.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#10b981",
+  "icons": [
+    {"src": "assets/generator-logo.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}

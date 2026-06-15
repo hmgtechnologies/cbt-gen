@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CBT Site Generator | HMG Academy CBT Pro</title>
+  <meta name="description" content="Generate client-branded CBT websites for schools, tutorials, and training centres using free static hosting and Supabase.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/generator-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="topbar">
+      <a class="brand" href="#top" aria-label="CBT Generator home">
+        <img src="assets/generator-logo.svg" alt="CBT Generator logo">
+        <span><strong>CBT Site Generator</strong><small>by HMG Concepts</small></span>
+      </a>
+      <div class="nav-actions">
+        <a href="#features">Features</a>
+        <a href="#builder">Builder</a>
+        <a href="#deployment">Deployment</a>
+        <a href="generator_validator.html">Validator</a>
+      </div>
+    </nav>
+
+    <section id="top" class="hero-grid">
+      <div>
+        <p class="eyebrow">No AI API · No paid backend · Client-side ZIP builder</p>
+        <h1>Create client-branded CBT websites in minutes.</h1>
+        <p class="lead">Enter a school/tutorial centre's details, upload their logo, choose colours, layout, fonts, and feature visibility, then generate a ready-to-upload CBT website ZIP based on the HMG Academy CBT Pro v3.1 Enterprise template.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#builder">Start Generating</a>
+          <button class="btn ghost" id="load-demo-btn" type="button">Load Demo Client</button>
+        </div>
+        <div class="trust-row">
+          <span>✅ Supabase-ready</span>
+          <span>✅ GitHub Pages-ready</span>
+          <span>✅ PWA shell</span>
+          <span>✅ Free-tool architecture</span>
+        </div>
+      </div>
+      <aside class="preview-device" id="live-preview">
+        <div class="device-top"><span></span><span></span><span></span></div>
+        <div class="preview-card">
+          <div class="preview-logo" id="preview-logo">HG</div>
+          <p class="preview-pill" id="preview-type">School CBT Platform</p>
+          <h2 id="preview-name">Client Academy CBT</h2>
+          <p id="preview-tagline">Secure exams, instant results, and analytics.</p>
+          <div class="preview-buttons"><span>Student Portal</span><span>Teacher Dashboard</span></div>
+          <div class="preview-stats"><b>11+</b><b>RLS</b><b>PWA</b></div>
+        </div>
+      </aside>
+    </section>
+  </header>
+
+  <main>
+    <section id="features" class="section">
+      <div class="section-head">
+        <p class="eyebrow">Enterprise generator features</p>
+        <h2>What this generator produces</h2>
+        <p>Every generated package preserves the CBT platform's pre-existing teacher, student, admin, SQL, PWA, backup, and documentation features, then overlays client branding and selected configuration.</p>
+      </div>
+      <div class="feature-grid">
+        <article><b>🏫 Client branding</b><span>Institution name, short name, logo, favicon, contact details, support links, custom colours and fonts.</span></article>
+        <article><b>🎨 UI/UX presets</b><span>Modern, enterprise, minimalist, classic, neon, and government-style layouts using CSS overrides.</span></article>
+        <article><b>🧩 Feature selection</b><span>Select visible features and generate a feature-selection report for the client handover.</span></article>
+        <article><b>🗄 Supabase config</b><span>Optionally inject the client's Supabase URL, anon key, and admin email into the generated CBT files.</span></article>
+        <article><b>📦 In-browser ZIP</b><span>No server upload. The ZIP is built in your browser using a local ZIP engine and downloaded instantly.</span></article>
+        <article><b>📚 Documentation</b><span>Generates client deployment guide, feature guide, handover notes, config JSON, and brand kit.</span></article>
+      </div>
+    </section>
+
+    <section id="builder" class="section builder-section">
+      <div class="section-head">
+        <p class="eyebrow">Generator builder</p>
+        <h2>Client CBT website setup</h2>
+        <p>Complete the form, preview the brand direction, then click <strong>Generate CBT Website ZIP</strong>.</p>
+      </div>
+
+      <form id="generator-form" name="generator-form" class="builder-grid">
+        <div class="panel form-panel">
+          <h3>1. Client details</h3>
+          <div class="two-col">
+            <label>Institution / Client Name<input name="clientName" required value="Gracefield International School"></label>
+            <label>Short Name<input name="shortName" required value="Gracefield"></label>
+          </div>
+          <label>Website Title<input name="siteTitle" value="Gracefield CBT Pro"></label>
+          <label>Tagline<input name="tagline" value="Secure exams, instant analytics, and certificates for every learner."></label>
+          <div class="two-col">
+            <label>Institution Type
+              <select name="institutionType">
+                <option>School</option><option>Tutorial Centre</option><option>University</option><option>Training Centre</option><option>Corporate Academy</option><option>Religious School</option>
+              </select>
+            </label>
+            <label>Contact Person / Owner<input name="ownerName" value="School Administrator"></label>
+          </div>
+          <div class="two-col">
+            <label>Email<input name="email" type="email" value="info@gracefield.edu.ng"></label>
+            <label>Phone<input name="phone" value="+234 800 000 0000"></label>
+          </div>
+          <div class="two-col">
+            <label>WhatsApp<input name="whatsapp" value="+234 800 000 0000"></label>
+            <label>Website<input name="website" value="https://example.com"></label>
+          </div>
+          <label>Address<textarea name="address" rows="2">Lagos, Nigeria</textarea></label>
+          <label>Upload Client Logo<input name="logo" id="logo-input" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label>
+          <p class="hint">PNG/SVG is recommended. If no logo is uploaded, the generator creates a simple initials-based SVG logo.</p>
+        </div>
+
+        <div class="panel form-panel">
+          <h3>2. Supabase and admin setup</h3>
+          <label>Supabase Project URL<input name="supabaseUrl" placeholder="https://YOUR_PROJECT_ID.supabase.co"></label>
+          <label>Supabase anon public key<textarea name="supabaseKey" rows="3" placeholder="Paste anon public key here. Do NOT paste service_role key."></textarea></label>
+          <label>Admin Email<input name="adminEmail" type="email" value="admin@gracefield.edu.ng"></label>
+          <div class="notice warning"><strong>Important:</strong> only the Supabase anon key belongs in generated frontend files. The service_role key must never be pasted here.</div>
+        </div>
+
+        <div class="panel form-panel">
+          <h3>3. Colours, fonts and layout</h3>
+          <div class="colour-grid">
+            <label>Primary<input name="primary" type="color" value="#10b981"></label>
+            <label>Accent<input name="accent" type="color" value="#3b82f6"></label>
+            <label>Secondary<input name="secondary" type="color" value="#8b5cf6"></label>
+            <label>Background<input name="background" type="color" value="#09090b"></label>
+            <label>Surface<input name="surface" type="color" value="#18181b"></label>
+            <label>Text<input name="text" type="color" value="#f8fafc"></label>
+          </div>
+          <div class="two-col">
+            <label>Font
+              <select name="font">
+                <option value="Inter, system-ui, -apple-system, Segoe UI, sans-serif">Inter/System</option>
+                <option value="Plus Jakarta Sans, system-ui, sans-serif">Plus Jakarta Sans</option>
+                <option value="Poppins, system-ui, sans-serif">Poppins</option>
+                <option value="Nunito, system-ui, sans-serif">Nunito</option>
+                <option value="Montserrat, system-ui, sans-serif">Montserrat</option>
+                <option value="Georgia, serif">Georgia Serif</option>
+              </select>
+            </label>
+            <label>Layout Preset
+              <select name="layout">
+                <option value="enterprise">Enterprise</option>
+                <option value="modern">Modern Cards</option>
+                <option value="classic">Classic School</option>
+                <option value="minimal">Minimal</option>
+                <option value="neon">Neon Tech</option>
+                <option value="government">Government/Institutional</option>
+              </select>
+            </label>
+          </div>
+          <div class="two-col">
+            <label>Theme Mode
+              <select name="themeMode"><option value="dark">Dark</option><option value="light">Light</option><option value="auto">Auto</option></select>
+            </label>
+            <label>Border Radius
+              <select name="radius"><option value="18px">Rounded</option><option value="10px">Medium</option><option value="4px">Sharp</option><option value="28px">Soft/Pill</option></select>
+            </label>
+          </div>
+        </div>
+
+        <div class="panel form-panel features-panel">
+          <h3>4. Feature selection</h3>
+          <p class="hint">Feature flags are written into the generated client configuration and documentation. Core platform files remain included so you do not lose pre-existing enterprise features.</p>
+          <div id="feature-groups"></div>
+        </div>
+
+        <div class="panel form-panel">
+          <h3>5. Package options</h3>
+          <label class="check"><input type="checkbox" name="includeDocs" checked> Include client documentation</label>
+          <label class="check"><input type="checkbox" name="includeSampleCsv" checked> Include sample question CSV</label>
+          <label class="check"><input type="checkbox" name="includeSql" checked> Include Supabase SQL setup file</label>
+          <label class="check"><input type="checkbox" name="includeGeneratorCredit" checked> Show “Generated by HMG CBT Generator” note</label>
+          <label class="check"><input type="checkbox" name="whiteLabel"> White-label generated UI as much as possible</label>
+          <label>Output ZIP Name<input name="zipName" value="gracefield-cbt-website.zip"></label>
+        </div>
+
+        <div class="panel action-panel">
+          <h3>6. Generate</h3>
+          <p>The generator will read the local CBT template, apply the selected branding/configuration, add generated client files, and download a ZIP ready for GitHub Pages or other static hosting.</p>
+          <button class="btn primary wide" type="button" id="generate-btn">Generate CBT Website ZIP</button>
+          <button class="btn ghost wide" type="button" id="download-config-btn">Download Client Config JSON</button>
+          <label class="btn ghost wide file-btn">Load Config JSON<input id="config-file" type="file" accept="application/json"></label>
+          <button class="btn danger wide" type="reset">Reset Form</button>
+          <div id="status" class="status-box">Ready.</div>
+        </div>
+      </form>
+    </section>
+
+    <section id="deployment" class="section">
+      <div class="section-head">
+        <p class="eyebrow">Deployment in plain steps</p>
+        <h2>How to use the generated ZIP</h2>
+      </div>
+      <ol class="steps">
+        <li><strong>Download ZIP</strong> from this generator.</li>
+        <li><strong>Extract it</strong> on your computer.</li>
+        <li><strong>Create Supabase project</strong> for the client or use the one entered in the generator.</li>
+        <li><strong>Run COMPLETE_SQL_SETUP.sql</strong> in Supabase SQL Editor.</li>
+        <li><strong>Upload extracted files</strong> to GitHub Pages, Netlify, Vercel, Cloudflare Pages, or any static host.</li>
+        <li><strong>Open deployment_validator.html</strong> in the generated site.</li>
+        <li><strong>Test teacher → admin approval → exam → student result</strong> before real exams.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><strong>CBT Site Generator</strong> by HMG Concepts / HMG Academy. Built for schools, tutorials, and training centres using free-based tools. No paid AI API required.</p>
+    <p>Adewale Samson Adeagbo · WhatsApp +234 810 086 6322 · hismarvellousgrace@gmail.com</p>
+  </footer>
+
+  <script src="generator.js"></script>
+</body>
+</html>
